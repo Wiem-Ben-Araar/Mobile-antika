@@ -45,10 +45,11 @@ public class ServiceUser {
     }
     
     //Signup
-  public void signup(TextField nom, TextField password, TextField email, TextField confirmPassword, TextField prenom, TextField telephone, TextField adresse, Resources res) {
+  public void signup(TextField nom, TextField password, TextField email, TextField confirmPassword, TextField prenom, TextField telephone, TextField adresse,ComboBox<String> roles , Resources res) {
     String url = Statics.BASE_URL+"/user/signup?email="+email.getText().toString()+
-                "&password="+password.getText().toString()+"&nom="+nom.getText().toString()+"&prenom="+prenom.getText().toString()+"&telephone="+telephone.getText().toString()+"&adresse="+adresse.getText().toString();
+                "&password="+password.getText().toString()+"&nom="+nom.getText().toString()+"&prenom="+prenom.getText().toString()+"&telephone="+telephone.getText().toString()+"&adresse="+adresse.getText().toString()+"&roles="+roles.getSelectedItem().toString();
         req.setUrl(url);
+        req.setPost(false);
        
         //Control saisi
         if(nom.getText().equals(" ") && password.getText().equals(" ") && email.getText().equals(" ")&& confirmPassword.getText().equals(" ")&& prenom.getText().equals(" ")&& adresse.getText().equals(" ")&& telephone.getText().equals(" ")) {

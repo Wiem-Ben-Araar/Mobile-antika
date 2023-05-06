@@ -41,9 +41,10 @@ public class ServiceAvis {
     //ajout 
     public void ajoutAvis(Avis avis) {
         
-        String url =Statics.BASE_URL+"/addAvis?commentaire="+avis.getCommentaire()+"&note"+avis.getNote(); //ghalet lakthareya 
+        String url = Statics.BASE_URL + "/addAvis?commentaire=" + avis.getCommentaire() + "&note=" + avis.getNote(); //ghalet lakthareya 
         
         req.setUrl(url);
+        req.setPost(false);
         req.addResponseListener((e) -> {
             
             String str = new String(req.getResponseData());//Reponse json hethi lyrinaha fi navigateur 9bila

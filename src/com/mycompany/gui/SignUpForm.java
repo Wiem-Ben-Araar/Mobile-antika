@@ -23,6 +23,7 @@ package com.mycompany.gui;
 
 import com.codename1.components.FloatingHint;
 import com.codename1.ui.Button;
+import com.codename1.ui.ComboBox;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
@@ -35,6 +36,7 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
 import com.mycompany.services.ServiceUser;
+import java.util.Vector;
 
 /**
  * Signup UI
@@ -62,6 +64,20 @@ public class SignUpForm extends BaseForm {
         TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
         TextField confirmPassword = new TextField("", "Confirm Password", 20, TextField.PASSWORD);
        
+        
+        //Role 
+        //Vector 3ibara ala array 7atit fiha roles ta3na ba3d nzidouhom lel comboBox
+        Vector<String> vectorRole;
+        vectorRole = new Vector();
+        
+        vectorRole.add("Client");
+        vectorRole.add("Artiste");
+        vectorRole.add("Expert");
+        
+        ComboBox<String>roles = new ComboBox<>(vectorRole);
+        
+        
+        
         email.setSingleLineTextArea(false);
         nom.setSingleLineTextArea(false);
         prenom.setSingleLineTextArea(false);
@@ -90,7 +106,8 @@ public class SignUpForm extends BaseForm {
                 new FloatingHint(password),
                 createLineSeparator(),
                 new FloatingHint(confirmPassword),
-                createLineSeparator()
+                createLineSeparator(),
+                roles
         );
         content.setScrollableY(true);
         add(BorderLayout.CENTER, content);
@@ -100,7 +117,7 @@ public class SignUpForm extends BaseForm {
         ));
         next.requestFocus();
         next.addActionListener(e -> {
-            ServiceUser.getInstance().signup(nom, password, email, confirmPassword, prenom, telephone, adresse, res);
+            ServiceUser.getInstance().signup(nom, password, email, confirmPassword, prenom, telephone, adresse,roles, res);
         Dialog.show("Success","Account is saved","OK",null);
         new SignInForm(res).show();
         });
