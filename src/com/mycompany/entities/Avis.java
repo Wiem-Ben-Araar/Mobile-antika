@@ -14,9 +14,16 @@ public class Avis {
     private String commentaire;
     private int note;
     private String createdAt;
+    private int user_id;
 
     public Avis() {
     }
+public Avis(String commentaire, int note, String createdAt, int user_id) {
+    this.commentaire = commentaire;
+    this.note = note;
+    this.createdAt = createdAt;
+    this.user_id = user_id;
+}
 
     public Avis(int id, String commentaire, int note, String createdAt) {
         this.id = id;
@@ -61,6 +68,14 @@ public class Avis {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     @Override

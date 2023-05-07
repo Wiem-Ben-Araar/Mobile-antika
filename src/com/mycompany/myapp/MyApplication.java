@@ -13,6 +13,8 @@ import com.codename1.ui.Toolbar;
 import java.io.IOException;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.io.NetworkEvent;
+import com.mycompany.gui.AjoutAvisForm;
+import com.mycompany.gui.ClientListe;
 import com.mycompany.gui.SignInForm;
 import com.mycompany.gui.SignUpForm;
 
@@ -55,7 +57,9 @@ public class MyApplication {
         }
       
           new SignInForm(theme).show();
-          // new SignUpForm(theme).show();
+           new ClientListe(theme).show();
+          new AjoutAvisForm(theme).show();
+          
     }
 
     public void stop() {
