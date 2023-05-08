@@ -21,9 +21,12 @@ package com.mycompany.gui;
 
 
 
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.ScaleImageLabel;
+import com.codename1.ui.Button;
 import com.codename1.ui.CheckBox;
 import com.codename1.ui.Component;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
@@ -36,6 +39,7 @@ import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mycompany.services.ServiceUser;
 
 /**
  * The user profile form
@@ -43,6 +47,7 @@ import com.codename1.ui.util.Resources;
  * @author Shai Almog
  */
 public class ProfileForm extends BaseForm {
+    private static String i;
 
     public ProfileForm(Resources res) {
         super("Newsfeed", BoxLayout.y());
@@ -51,13 +56,12 @@ public class ProfileForm extends BaseForm {
         getTitleArea().setUIID("Container");
         setTitle("Profile");
         getContentPane().setScrollVisible(false);
-        
+
         super.addSideMenu(res);
-        
+
         tb.addSearchCommand(e -> {});
-        
-        
-        Image img = res.getImage("profile-background.jpg");
+
+        Image img = res.getImage("signup-background.jpg");
         if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
@@ -69,40 +73,41 @@ public class ProfileForm extends BaseForm {
         Label twitter = new Label("486 followers", res.getImage("twitter-logo.png"), "BottomPad");
         facebook.setTextPosition(BOTTOM);
         twitter.setTextPosition(BOTTOM);
-        
+
         add(LayeredLayout.encloseIn(
                 sl,
                 BorderLayout.south(
-                    GridLayout.encloseIn(3, 
-                            facebook,
-                            FlowLayout.encloseCenter(
-                                new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond")),
-                            twitter
-                    )
+                        GridLayout.encloseIn(3,
+                                facebook,
+                                FlowLayout.encloseCenter(
+                                        new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond")),
+                                twitter
+                        )
                 )
         ));
+        String us=SessionManager.getEmail();
+        System.out.println(us);
 
-        TextField username = new TextField("sandeep");
-        username.setUIID("TextFieldBlack");
-        addStringValue("Username", username);
-
-        TextField email = new TextField("sandeep@gmail.com", "E-Mail", 20, TextField.EMAILADDR);
+        TextField email = new TextField(us);
         email.setUIID("TextFieldBlack");
-        addStringValue("E-Mail", email);
-        
-        TextField password = new TextField("sandeep", "Password", 20, TextField.PASSWORD);
+        addStringValue("email", email);
+
+        TextField password = new TextField(SessionManager.getPassowrd(), "Password", 20, TextField.PASSWORD);
         password.setUIID("TextFieldBlack");
         addStringValue("Password", password);
 
-        CheckBox cb1 = CheckBox.createToggle(res.getImage("on-off-off.png"));
-        cb1.setUIID("Label");
-        cb1.setPressedIcon(res.getImage("on-off-on.png"));
-        CheckBox cb2 = CheckBox.createToggle(res.getImage("on-off-off.png"));
-        cb2.setUIID("Label");
-        cb2.setPressedIcon(res.getImage("on-off-on.png"));
-        
-        addStringValue("Facebook", FlowLayout.encloseRightMiddle(cb1));
-        addStringValue("Twitter", FlowLayout.encloseRightMiddle(cb2));
+       
+
+        Button modiff = new Button("Modifier");
+        modiff.addActionListener((edit) -> {
+            InfiniteProgress ip = new InfiniteProgress();
+            final Dialog ipDlg = ip.showInfiniteBlocking();
+            ServiceUser.editUser(email.getText(), password.getText());
+            SessionManager.setEmail(email.getText());
+            Dialog.show("success", "", "OK", null);
+            ipDlg.dispose();
+        });
+        add(modiff);
     }
     
     private void addStringValue(String s, Component v) {

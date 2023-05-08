@@ -8,6 +8,7 @@ package com.mycompany.services;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
+import com.codename1.io.MultipartRequest;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.ComboBox;
@@ -16,6 +17,7 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.util.Resources;
 import com.mycompany.entities.User;
+import com.mycompany.gui.AjoutAvisForm;
 import com.mycompany.gui.SessionManager;
 import com.mycompany.gui.WalkthruForm;
 import com.mycompany.utilies.Statics;
@@ -80,47 +82,51 @@ public class ServiceUser {
     
     public void signin(TextField email, TextField password, Resources res) {
 
-        String url = Statics.BASE_URL + "/user/signin?email=" + email.getText().toString() + "&password=" + password.getText().toString();
+    String url = Statics.BASE_URL + "/user/signin?email=" + email.getText().toString() + "&password=" + password.getText().toString();
 
-        req = new ConnectionRequest(url, false); //false ya3ni url mazlt matba3thtich lel server
-        req.setUrl(url);
+    req = new ConnectionRequest(url, false);
+    req.setUrl(url);
+    req.setPost(false);
+    req.addResponseListener((e) -> {
 
-        req.addResponseListener((e) -> {
+        JSONParser j = new JSONParser();
 
-            JSONParser j = new JSONParser();
+        String json = new String(req.getResponseData()) + "";
 
-            String json = new String(req.getResponseData()) + "";
+        try {
 
-            try {
+            if (json.equals("failed")) {
+                Dialog.show("Echec d'authentification", "Username ou mot de passe éronné", "OK", null);
+            } else {
+                System.out.println("data ==" + json);
 
-                if (json.equals("failed")) {
-                    Dialog.show("Echec d'authentification", "Username ou mot de passe éronné", "OK", null);
-                } else {
-                    System.out.println("data ==" + json);
+                Map<String, Object> user = j.parseJSON(new CharArrayReader(json.toCharArray()));
 
-                    Map<String, Object> user = j.parseJSON(new CharArrayReader(json.toCharArray()));
-
+                if(user.containsKey("id")) {
                     //Session 
                     float id = Float.parseFloat(user.get("id").toString());
-                    SessionManager.setId((int) id);//jibt id ta3 user ly3ml login w sajltha fi session ta3i
+                    SessionManager.setId((int) id);
 
                     SessionManager.setPassowrd(user.get("password").toString());
 
                     SessionManager.setEmail(user.get("email").toString());
 
                     // redirect to home page
-                    new WalkthruForm (res).show();
+                    new AjoutAvisForm (res).show();
+                } else {
+                    Dialog.show("Erreur", "Compte inexistant", "OK", null);
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-        });
+    });
 
-        //ba3d execution ta3 requete ely heya url nestanaw response ta3 server.
-        NetworkManager.getInstance().addToQueueAndWait(req);
+    NetworkManager.getInstance().addToQueueAndWait(req);
 
-    }
+}
+
     //affichage all users 
         public ArrayList<User> afficherAllClient() {
         ArrayList<User> result = new ArrayList<>();
@@ -159,4 +165,34 @@ public class ServiceUser {
         NetworkManager.getInstance().addToQueueAndWait(req);
         return result;
     }
+   // edit user
+public static void editUser(String email, String password) {
+    String url = Statics.BASE_URL + "/user/editUser=?email="+email+"&password="+password;
+    
+    MultipartRequest req = new MultipartRequest();
+    req.setUrl(url);
+    req.setPost(true);
+    req.addArgument("id", String.valueOf(SessionManager.getId()));
+    req.addArgument("email", email);
+    req.addArgument("password", password);
+
+    
+    req.addResponseListener((response) -> {
+        byte[] data = ((byte[]) response.getMetaData());
+        String s = new String(data);
+        System.out.println(s);
+        if (s.equals("success")) {
+            // do something
+        } else {
+            Dialog.show("Erreur", "Echec de modification", "ok", null);
+        }
+    });
+    
+    NetworkManager.getInstance().addToQueueAndWait(req);
 }
+
+            
+               
+        }
+        
+

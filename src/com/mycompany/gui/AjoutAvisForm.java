@@ -54,7 +54,7 @@ public class AjoutAvisForm extends BaseForm{
         setTitle("Ajout Avis");
         getContentPane().setScrollVisible(false);
         
-        
+        super.addSideMenu(res);
         tb.addSearchCommand(e ->  {
             
         });
@@ -64,7 +64,7 @@ public class AjoutAvisForm extends BaseForm{
         Label s1 = new Label();
         Label s2 = new Label();
         
-
+addTab(swipe,s1,res.getImage("signup-background.jpg"),"","",res);
         
         //
         
