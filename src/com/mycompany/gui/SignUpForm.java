@@ -118,6 +118,7 @@ public class SignUpForm extends BaseForm {
         next.requestFocus();
         next.addActionListener(e -> {
             ServiceUser.getInstance().signup(nom, password, email, confirmPassword, prenom, telephone, adresse,roles, res);
+            
         Dialog.show("Success","Account is saved","OK",null);
         new SignInForm(res).show();
         });

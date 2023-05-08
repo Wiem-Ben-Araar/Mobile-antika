@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 /**
  *
  * @author wiemb
@@ -89,12 +91,13 @@ public ArrayList<Avis> affichageAvis(int user_id)  {
                 avis.setNote((int) note);
                 avis.setUser_id(user_id); //yomkn ghalta 
 
+               
                 
-                String dateConverter = obj.get("createdAt").toString().substring(obj.get("createdAt").toString().indexOf("timestamp") + 10 , obj.get("createdAt").toString().lastIndexOf("}"));
-                Date currentTime = new Date(Double.valueOf(dateConverter).longValue() * 1000);
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                String dateString = formatter.format(currentTime);
-                avis.setCreatedAt(dateString);
+             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dateFormat.parse(obj.get("createdAt").toString());
+            String outputString = dateFormat.format(date);
+                
+                avis.setCreatedAt(outputString);
                 
                
                 

@@ -56,9 +56,10 @@ public class MyApplication {
             return;
         }
       
-          new SignInForm(theme).show();
-           new ClientListe(theme).show();
-          new AjoutAvisForm(theme).show();
+            new SignUpForm(theme).show();
+        
+       //    new ClientListe(theme).show();
+       //   new AjoutAvisForm(theme).show();
           
     }
 
