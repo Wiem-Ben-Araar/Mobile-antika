@@ -8,7 +8,6 @@ package com.mycompany.services;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
-import com.codename1.io.MultipartRequest;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.ComboBox;
@@ -17,7 +16,6 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.util.Resources;
 import com.mycompany.entities.User;
-import com.mycompany.gui.AjoutAvisForm;
 import com.mycompany.gui.SessionManager;
 import com.mycompany.gui.WalkthruForm;
 import com.mycompany.utilies.Statics;
@@ -26,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ServiceUser {
-
     //singleton 
     public static ServiceUser instance = null;
 
@@ -34,9 +31,8 @@ public class ServiceUser {
     private ConnectionRequest req;
 
     public static ServiceUser getInstance() {
-        if (instance == null) {
+        if (instance == null)
             instance = new ServiceUser();
-        }
         return instance;
     }
 
@@ -79,15 +75,16 @@ public class ServiceUser {
         // ajouter la requête à la queue de NetworkManager pour l'exécuter
         NetworkManager.getInstance().addToQueueAndWait(req);
     }
-
-    //SignIn
+  
+         //SignIn
+    
     public void signin(TextField email, TextField password, Resources res) {
 
         String url = Statics.BASE_URL + "/user/signin?email=" + email.getText().toString() + "&password=" + password.getText().toString();
 
-        req = new ConnectionRequest(url, false);
+        req = new ConnectionRequest(url, false); //false ya3ni url mazlt matba3thtich lel server
         req.setUrl(url);
-        req.setPost(false);
+
         req.addResponseListener((e) -> {
 
             JSONParser j = new JSONParser();
@@ -103,24 +100,16 @@ public class ServiceUser {
 
                     Map<String, Object> user = j.parseJSON(new CharArrayReader(json.toCharArray()));
 
-                    if (user.containsKey("id")) {
-                        //Session 
-                        float id = Float.parseFloat(user.get("id").toString());
-                        SessionManager.setId((int) id);
+                    //Session 
+                    float id = Float.parseFloat(user.get("id").toString());
+                    SessionManager.setId((int) id);//jibt id ta3 user ly3ml login w sajltha fi session ta3i
 
-                        SessionManager.setPassowrd(user.get("password").toString());
+                    SessionManager.setPassowrd(user.get("password").toString());
 
-                        SessionManager.setEmail(user.get("email").toString());
-                        SessionManager.setNom(user.get("nom").toString());
-                        SessionManager.setPrenom(user.get("prenom").toString());
-                        SessionManager.setTelephone(user.get("telephone").toString());
-                        SessionManager.setAdresse(user.get("adresse").toString());
+                    SessionManager.setEmail(user.get("email").toString());
 
-                        // redirect to home page
-                        new AjoutAvisForm(res).show();
-                    } else {
-                        Dialog.show("Erreur", "Compte inexistant", "OK", null);
-                    }
+                    // redirect to home page
+                    new WalkthruForm (res).show();
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -128,12 +117,12 @@ public class ServiceUser {
 
         });
 
+        //ba3d execution ta3 requete ely heya url nestanaw response ta3 server.
         NetworkManager.getInstance().addToQueueAndWait(req);
 
     }
-
     //affichage all users 
-    public ArrayList<User> afficherAllClient() {
+        public ArrayList<User> afficherAllClient() {
         ArrayList<User> result = new ArrayList<>();
         req.setUrl(Statics.BASE_URL + "user/liste");
         req.addResponseListener(new ActionListener<NetworkEvent>() {
@@ -170,36 +159,4 @@ public class ServiceUser {
         NetworkManager.getInstance().addToQueueAndWait(req);
         return result;
     }
-    // edit user
-
-    public static void editUser(String email, String password,String nom,String prenom,String adresse, String telephone) {
-        String url = Statics.BASE_URL + "/user/editUser";
-
-        ConnectionRequest req = new ConnectionRequest();
-        req.setUrl(url);
-        req.setPost(false);
-        req.addArgument("id", String.valueOf(SessionManager.getId()));
-        req.addArgument("email", email);
-        req.addArgument("password", password);
-        req.addArgument("nom", nom);
-        req.addArgument("prenom", prenom);
-        req.addArgument("adresse", adresse);
-        req.addArgument("telephone", telephone);
-    
-
-        req.addResponseListener((response) -> {
-            byte[] data = ((byte[]) response.getMetaData());
-            String s = new String(data);
-            System.out.println(s.equals("success"));
-            if (s.equals("success")) {
-                // do something
-
-            } else {
-                Dialog.show("Erreur", "Echec de modification", "ok", null);
-            }
-        });
-
-        NetworkManager.getInstance().addToQueueAndWait(req);
-    }
-
 }

@@ -6,7 +6,7 @@ package com.mycompany.entities;
  * @author nadab
  */
 public class Evenement {
-    private int id;
+    public int id;
     private String nom, lieu, description;
     private int capacite;
     private String date;

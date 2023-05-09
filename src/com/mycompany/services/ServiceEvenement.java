@@ -143,7 +143,7 @@ public class ServiceEvenement {
         });
         
         NetworkManager.getInstance().addToQueueAndWait(request);
-        return  resultOk;
+        return resultOk;
     }
     
      public boolean modifierEvent(Evenement evenement) {

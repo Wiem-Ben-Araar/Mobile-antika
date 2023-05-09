@@ -4,14 +4,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/wiemb/OneDrive/Documents/NetBeansProjects/CodenameOne-Mobile/src/com/mycompany/myapp/MyApplication.java</file>
-            <file>file:/C:/Users/wiemb/OneDrive/Documents/NetBeansProjects/CodenameOne-Mobile/src/com/mycompany/services/ServiceAvis.java</file>
-            <file>file:/C:/Users/wiemb/OneDrive/Documents/NetBeansProjects/CodenameOne-Mobile/src/com/mycompany/gui/SignUpForm.java</file>
-            <file>file:/C:/Users/wiemb/OneDrive/Documents/NetBeansProjects/CodenameOne-Mobile/src/com/mycompany/gui/AjoutAvisForm.java</file>
-            <file>file:/C:/Users/wiemb/OneDrive/Documents/NetBeansProjects/CodenameOne-Mobile/src/com/mycompany/entities/User.java</file>
-            <file>file:/C:/Users/wiemb/OneDrive/Documents/NetBeansProjects/CodenameOne-Mobile/src/com/mycompany/gui/SignInForm.java</file>
-            <file>file:/C:/Users/wiemb/OneDrive/Documents/NetBeansProjects/CodenameOne-Mobile/src/com/mycompany/entities/Avis.java</file>
-            <file>file:/C:/Users/wiemb/OneDrive/Documents/NetBeansProjects/CodenameOne-Mobile/src/com/mycompany/services/ServiceUser.java</file>
+            <file>file:/C:/Users/nadab/OneDrive/Desktop/Mobile-antika-WiemBenAraar/src/com/mycompany/gui/SessionManager.java</file>
+            <file>file:/C:/Users/nadab/OneDrive/Desktop/Mobile-antika-WiemBenAraar/src/com/mycompany/gui/AddEventForm.java</file>
+            <file>file:/C:/Users/nadab/OneDrive/Desktop/Mobile-antika-WiemBenAraar/src/com/mycompany/services/ServiceEvenement.java</file>
+            <file>file:/C:/Users/nadab/OneDrive/Desktop/Mobile-antika-WiemBenAraar/src/com/mycompany/gui/BaseForm.java</file>
+            <file>file:/C:/Users/nadab/OneDrive/Desktop/Mobile-antika-WiemBenAraar/src/com/mycompany/gui/ListEventForm.java</file>
+            <file>file:/C:/Users/nadab/OneDrive/Desktop/Mobile-antika-WiemBenAraar/src/com/mycompany/services/ServiceUser.java</file>
+            <file>file:/C:/Users/nadab/OneDrive/Desktop/Mobile-antika-WiemBenAraar/src/com/mycompany/gui/ListAvisForm.java</file>
+            <file>file:/C:/Users/nadab/OneDrive/Desktop/Mobile-antika-WiemBenAraar/src/com/mycompany/gui/ClientListe.java</file>
         </group>
     </open-files>
 </project-private>

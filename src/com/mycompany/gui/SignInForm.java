@@ -31,7 +31,6 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
-import com.mycompany.services.ServiceUser;
 
 /**
  * Sign in UI
@@ -53,9 +52,9 @@ public class SignInForm extends BaseForm {
         
         add(BorderLayout.NORTH, new Label(res.getImage("Logo.png"), "LogoLabel"));
         
-        TextField email = new TextField("", "email", 20, TextField.ANY);
+        TextField username = new TextField("", "Username", 20, TextField.ANY);
         TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
-        email.setSingleLineTextArea(false);
+        username.setSingleLineTextArea(false);
         password.setSingleLineTextArea(false);
         Button signIn = new Button("Sign In");
         Button signUp = new Button("Sign Up");
@@ -64,7 +63,7 @@ public class SignInForm extends BaseForm {
         Label doneHaveAnAccount = new Label("Don't have an account?");
         
         Container content = BoxLayout.encloseY(
-                new FloatingHint(email),
+                new FloatingHint(username),
                 createLineSeparator(),
                 new FloatingHint(password),
                 createLineSeparator(),
@@ -74,11 +73,7 @@ public class SignInForm extends BaseForm {
         content.setScrollableY(true);
         add(BorderLayout.SOUTH, content);
         signIn.requestFocus();
-       signIn.addActionListener(e -> {
-         ServiceUser.getInstance().signin(email, password, res);
-        new AjoutAvisForm(res).show();
-});
-
+        signIn.addActionListener(e -> new NewsfeedForm(res).show());
     }
     
 }

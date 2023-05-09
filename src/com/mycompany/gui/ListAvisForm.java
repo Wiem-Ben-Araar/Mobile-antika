@@ -52,7 +52,7 @@ public class ListAvisForm extends BaseForm{
         setTitle("Ajout Avis");
         getContentPane().setScrollVisible(false);
         
-          super.addSideMenu(res);
+        
         tb.addSearchCommand(e ->  {
             
         });
@@ -61,7 +61,7 @@ public class ListAvisForm extends BaseForm{
         
         Label s1 = new Label();
         Label s2 = new Label();
-        addTab(swipe,s1,res.getImage("signup-background.jpg"),"","",res);
+        
 
         
         //
@@ -99,7 +99,43 @@ public class ListAvisForm extends BaseForm{
         Component.setSameSize(radioContainer, s1, s2);
         add(LayeredLayout.encloseIn(swipe, radioContainer));
 
+        ButtonGroup barGroup = new ButtonGroup();
+        RadioButton mesListes = RadioButton.createToggle("Mes Avis", barGroup);
+        mesListes.setUIID("SelectBar");
+        RadioButton liste = RadioButton.createToggle("Autres", barGroup);
+        liste.setUIID("SelectBar");
+        RadioButton partage = RadioButton.createToggle("Ajouter votre avis", barGroup);
+        partage.setUIID("SelectBar");
+        Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
+
+        mesListes.addActionListener((e) -> {
+               InfiniteProgress ip = new InfiniteProgress();
+        final Dialog ipDlg = ip.showInifiniteBlocking();
+        
+          ListAvisForm a = new ListAvisForm(res);
+          //  a.show();
+            refreshTheme();
+        });
+
+        add(LayeredLayout.encloseIn(
+                GridLayout.encloseIn(3, mesListes, liste, partage),
+                FlowLayout.encloseBottom(arrow)
+        ));
+
+        partage.setSelected(true);
+        arrow.setVisible(false);
+        addShowListener(e -> {
+            arrow.setVisible(true);
+            updateArrowPosition(partage, arrow);
+        });
+        bindButtonSelection(mesListes, arrow);
+        bindButtonSelection(liste, arrow);
+        bindButtonSelection(partage, arrow);
+        // special case for rotation
+        addOrientationListener(e -> {
+            updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
+        });
         
               //Appel affichage methode
         ArrayList<Avis>list = ServiceAvis.getInstance().affichageAvis(82);

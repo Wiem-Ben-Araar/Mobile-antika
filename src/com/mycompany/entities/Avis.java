@@ -25,12 +25,11 @@ public Avis(String commentaire, int note, String createdAt, int user_id) {
     this.user_id = user_id;
 }
 
-    public Avis(int id, String commentaire, int note, String createdAt,int user_id) {
+    public Avis(int id, String commentaire, int note, String createdAt) {
         this.id = id;
         this.commentaire = commentaire;
         this.note = note;
         this.createdAt = createdAt;
-        this.user_id = user_id;
     }
 
     public Avis(String commentaire, int note, String createdAt) {
