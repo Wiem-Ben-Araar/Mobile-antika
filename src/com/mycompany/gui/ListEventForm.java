@@ -14,6 +14,7 @@ import static com.codename1.ui.Component.CENTER;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
+import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
@@ -24,14 +25,17 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
+import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import com.mycompany.entities.Evenement;
 import com.mycompany.services.ServiceEvenement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -127,14 +131,15 @@ public class ListEventForm extends BaseForm{
                     eventContainer.addAll(new Label("Lieu: " + evenement.getLieu(), "NewsTopLine"));
                     eventContainer.addAll(new Label("Description: " + evenement.getDescription(), "NewsTopLine"));
                     eventContainer.addAll(new Label("Capacite: " + evenement.getCapacite(), "NewsTopLine"));
-                    eventContainer.addAll(new Label(" "));
                 addButton(evenement, eventContainer, res);
+                addDeleteButton(eventContainer, evenement,listEvent);
                 add(eventContainer);
-                createLineSeparator();
+                
             }
          }
     
     private void addButton(Evenement evenement, Container eventContainer, Resources res) {
+        
         Button button = new Button("View Details");
         button.addActionListener(e -> {
              Dialog.show("Evenement", "Nom: " + evenement.getNom() + "\nLieu: " + evenement.getLieu() 
@@ -143,29 +148,29 @@ public class ListEventForm extends BaseForm{
         eventContainer.add(button);
         
         
-      /* Button deleteButton = new Button("Delete");
-        deleteButton.addActionListener(new ActionListener() {
-            Dialog dig = new Dialog("Suppression");
-             
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                 if(dig.show("Suppression","Vous voulez supprimer ce reclamation ?","Annuler","Oui")) {
-                dig.dispose();
-            }
-            else {
-                dig.dispose();
-                 }
-                //n3ayto l suuprimer men service Reclamation
-                if(ServiceEvenement.getInstance().deleteEvent(evenement.getId())) {
-                    new ListEventForm(res).show();
-                }
-            }
-           
-        });
-         eventContainer.add(deleteButton);*/
-      
-     
-    
+         
     }
+    public void addDeleteButton(Container eventContainer, Evenement evenement, ArrayList<Evenement> listEvent) {
+    Button deleteButton = new Button("Delete");
+    deleteButton.addActionListener(evt -> {
+        if (Dialog.show("Confirmation", "Are you sure you want to delete?", "OK", "Cancel")) {
+            // Delete object from database
+            if (evenement instanceof Evenement) {
+                ServiceEvenement.getInstance().deleteEvent(evenement.getId());
+            } else {
+                System.out.println("erreur");
+            }
+            // Remove object from list and container
+            listEvent.remove(evenement);
+            eventContainer.remove();
+            eventContainer.revalidate();
+            eventContainer.animateLayout(150);
+        }
+    });
+    eventContainer.add(deleteButton);
 }
+
+}
+
+
     
