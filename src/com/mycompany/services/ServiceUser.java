@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ServiceUser {
+
     //singleton 
     public static ServiceUser instance = null;
 
@@ -33,8 +34,9 @@ public class ServiceUser {
     private ConnectionRequest req;
 
     public static ServiceUser getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new ServiceUser();
+        }
         return instance;
     }
 
@@ -77,58 +79,61 @@ public class ServiceUser {
         // ajouter la requête à la queue de NetworkManager pour l'exécuter
         NetworkManager.getInstance().addToQueueAndWait(req);
     }
-  
-         //SignIn
-    
+
+    //SignIn
     public void signin(TextField email, TextField password, Resources res) {
 
-    String url = Statics.BASE_URL + "/user/signin?email=" + email.getText().toString() + "&password=" + password.getText().toString();
+        String url = Statics.BASE_URL + "/user/signin?email=" + email.getText().toString() + "&password=" + password.getText().toString();
 
-    req = new ConnectionRequest(url, false);
-    req.setUrl(url);
-    req.setPost(false);
-    req.addResponseListener((e) -> {
+        req = new ConnectionRequest(url, false);
+        req.setUrl(url);
+        req.setPost(false);
+        req.addResponseListener((e) -> {
 
-        JSONParser j = new JSONParser();
+            JSONParser j = new JSONParser();
 
-        String json = new String(req.getResponseData()) + "";
+            String json = new String(req.getResponseData()) + "";
 
-        try {
+            try {
 
-            if (json.equals("failed")) {
-                Dialog.show("Echec d'authentification", "Username ou mot de passe éronné", "OK", null);
-            } else {
-                System.out.println("data ==" + json);
-
-                Map<String, Object> user = j.parseJSON(new CharArrayReader(json.toCharArray()));
-
-                if(user.containsKey("id")) {
-                    //Session 
-                    float id = Float.parseFloat(user.get("id").toString());
-                    SessionManager.setId((int) id);
-
-                    SessionManager.setPassowrd(user.get("password").toString());
-
-                    SessionManager.setEmail(user.get("email").toString());
-
-                    // redirect to home page
-                    new AjoutAvisForm (res).show();
+                if (json.equals("failed")) {
+                    Dialog.show("Echec d'authentification", "Username ou mot de passe éronné", "OK", null);
                 } else {
-                    Dialog.show("Erreur", "Compte inexistant", "OK", null);
+                    System.out.println("data ==" + json);
+
+                    Map<String, Object> user = j.parseJSON(new CharArrayReader(json.toCharArray()));
+
+                    if (user.containsKey("id")) {
+                        //Session 
+                        float id = Float.parseFloat(user.get("id").toString());
+                        SessionManager.setId((int) id);
+
+                        SessionManager.setPassowrd(user.get("password").toString());
+
+                        SessionManager.setEmail(user.get("email").toString());
+                        SessionManager.setNom(user.get("nom").toString());
+                        SessionManager.setPrenom(user.get("prenom").toString());
+                        SessionManager.setTelephone(user.get("telephone").toString());
+                        SessionManager.setAdresse(user.get("adresse").toString());
+
+                        // redirect to home page
+                        new AjoutAvisForm(res).show();
+                    } else {
+                        Dialog.show("Erreur", "Compte inexistant", "OK", null);
+                    }
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
-    });
+        });
 
-    NetworkManager.getInstance().addToQueueAndWait(req);
+        NetworkManager.getInstance().addToQueueAndWait(req);
 
-}
+    }
 
     //affichage all users 
-        public ArrayList<User> afficherAllClient() {
+    public ArrayList<User> afficherAllClient() {
         ArrayList<User> result = new ArrayList<>();
         req.setUrl(Statics.BASE_URL + "user/liste");
         req.addResponseListener(new ActionListener<NetworkEvent>() {
@@ -165,34 +170,36 @@ public class ServiceUser {
         NetworkManager.getInstance().addToQueueAndWait(req);
         return result;
     }
-   // edit user
-public static void editUser(String email, String password) {
-    String url = Statics.BASE_URL + "/user/editUser=?email="+email+"&password="+password;
-    
-    MultipartRequest req = new MultipartRequest();
-    req.setUrl(url);
-    req.setPost(true);
-    req.addArgument("id", String.valueOf(SessionManager.getId()));
-    req.addArgument("email", email);
-    req.addArgument("password", password);
+    // edit user
 
+    public static void editUser(String email, String password,String nom,String prenom,String adresse, String telephone) {
+        String url = Statics.BASE_URL + "/user/editUser";
+
+        ConnectionRequest req = new ConnectionRequest();
+        req.setUrl(url);
+        req.setPost(false);
+        req.addArgument("id", String.valueOf(SessionManager.getId()));
+        req.addArgument("email", email);
+        req.addArgument("password", password);
+        req.addArgument("nom", nom);
+        req.addArgument("prenom", prenom);
+        req.addArgument("adresse", adresse);
+        req.addArgument("telephone", telephone);
     
-    req.addResponseListener((response) -> {
-        byte[] data = ((byte[]) response.getMetaData());
-        String s = new String(data);
-        System.out.println(s);
-        if (s.equals("success")) {
-            // do something
-        } else {
-            Dialog.show("Erreur", "Echec de modification", "ok", null);
-        }
-    });
-    
-    NetworkManager.getInstance().addToQueueAndWait(req);
+
+        req.addResponseListener((response) -> {
+            byte[] data = ((byte[]) response.getMetaData());
+            String s = new String(data);
+            System.out.println(s.equals("success"));
+            if (s.equals("success")) {
+                // do something
+
+            } else {
+                Dialog.show("Erreur", "Echec de modification", "ok", null);
+            }
+        });
+
+        NetworkManager.getInstance().addToQueueAndWait(req);
+    }
+
 }
-
-            
-               
-        }
-        
-

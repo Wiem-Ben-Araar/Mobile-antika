@@ -18,9 +18,6 @@ package com.mycompany.gui;
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
-
-
-
 import com.codename1.components.InfiniteProgress;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.ui.Button;
@@ -47,6 +44,7 @@ import com.mycompany.services.ServiceUser;
  * @author Shai Almog
  */
 public class ProfileForm extends BaseForm {
+
     private static String i;
 
     public ProfileForm(Resources res) {
@@ -59,18 +57,19 @@ public class ProfileForm extends BaseForm {
 
         super.addSideMenu(res);
 
-        tb.addSearchCommand(e -> {});
+        tb.addSearchCommand(e -> {
+        });
 
         Image img = res.getImage("signup-background.jpg");
-        if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
+        if (img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
         ScaleImageLabel sl = new ScaleImageLabel(img);
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
 
-        Label facebook = new Label("786 followers", res.getImage("facebook-logo.png"), "BottomPad");
-        Label twitter = new Label("486 followers", res.getImage("twitter-logo.png"), "BottomPad");
+        Label facebook = new Label(res.getImage("facebook-logo.png"), "BottomPad");
+        Label twitter = new Label(res.getImage("twitter-logo.png"), "BottomPad");
         facebook.setTextPosition(BOTTOM);
         twitter.setTextPosition(BOTTOM);
 
@@ -85,31 +84,43 @@ public class ProfileForm extends BaseForm {
                         )
                 )
         ));
-        String us=SessionManager.getEmail();
+        String us = SessionManager.getEmail();
         System.out.println(us);
 
         TextField email = new TextField(us);
         email.setUIID("TextFieldBlack");
         addStringValue("email", email);
 
-        TextField password = new TextField(SessionManager.getPassowrd(), "Password", 20, TextField.PASSWORD);
+        TextField password = new TextField(null, "Password", 20, TextField.PASSWORD);
         password.setUIID("TextFieldBlack");
         addStringValue("Password", password);
+        TextField nom = new TextField(SessionManager.getNom());
+        TextField prenom = new TextField(SessionManager.getPrenom());
+        TextField adresse = new TextField(SessionManager.getAdresse());
+        TextField telephone = new TextField(SessionManager.getTelephone());
+        nom.setUIID("TextFieldBlack");
+        prenom.setUIID("TextFieldBlack");
+        adresse.setUIID("TextFieldBlack");
+        telephone.setUIID("TextFieldBlack");
+System.out.println(SessionManager.getTelephone());
 
-       
+        addStringValue("nom", nom);
+        addStringValue("prenom", prenom);
+        addStringValue("adresse", adresse);
+        addStringValue("telephone", telephone);
 
         Button modiff = new Button("Modifier");
         modiff.addActionListener((edit) -> {
             InfiniteProgress ip = new InfiniteProgress();
             final Dialog ipDlg = ip.showInfiniteBlocking();
-            ServiceUser.editUser(email.getText(), password.getText());
+            ServiceUser.editUser(email.getText(), password.getText(), nom.getText(), prenom.getText(), adresse.getText(), telephone.getText());
             SessionManager.setEmail(email.getText());
-            Dialog.show("success", "", "OK", null);
+
             ipDlg.dispose();
         });
         add(modiff);
     }
-    
+
     private void addStringValue(String s, Component v) {
         add(BorderLayout.west(new Label(s, "PaddedLabel")).
                 add(BorderLayout.CENTER, v));
