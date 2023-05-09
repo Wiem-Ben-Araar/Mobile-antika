@@ -15,6 +15,8 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.io.NetworkEvent;
 import com.mycompany.gui.AjoutAvisForm;
 import com.mycompany.gui.ClientListe;
+import com.mycompany.gui.ListAvisForm;
+import com.mycompany.gui.SessionManager;
 import com.mycompany.gui.SignInForm;
 import com.mycompany.gui.SignUpForm;
 
@@ -55,8 +57,15 @@ public class MyApplication {
             current.show();
             return;
         }
-      
-            new SignInForm(theme).show();
+      if(SessionManager.getEmail()==null){
+          new SignInForm(theme).show();
+      }
+      else {
+          
+          new ListAvisForm(theme).show();
+          
+      }
+           // new SignInForm(theme).show();
         
        //    new ClientListe(theme).show();
         //  new AjoutAvisForm(theme).show();
