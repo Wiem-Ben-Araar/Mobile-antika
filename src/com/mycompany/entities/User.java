@@ -17,6 +17,7 @@ public class User {
     private String prenom;
     private String telephone;
     private String adresse;
+    private User user;
 
     public User() {
     }
@@ -89,6 +90,14 @@ public class User {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

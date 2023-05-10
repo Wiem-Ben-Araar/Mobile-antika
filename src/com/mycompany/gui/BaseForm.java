@@ -35,6 +35,7 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import java.io.IOException;
 
 /**
  * Base class for the forms with common functionality
@@ -94,6 +95,29 @@ public class BaseForm extends Form {
             Storage.getInstance().clearStorage();
             Storage.getInstance().clearCache();
             System.out.println(SessionManager.getEmail());
+        });
+         tb.addMaterialCommandToSideMenu("Newsfeed", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
+      tb.addMaterialCommandToSideMenu("Panier", FontImage.MATERIAL_UPDATE, e -> {
+            try {
+                new ListProduitsPanierForm(this.getComponentForm(),res).show();
+            } catch (IOException ex) {
+            }
+        });
+            tb.addMaterialCommandToSideMenu("Liste des livraison", FontImage.MATERIAL_UPDATE, e -> {
+            try {
+                new ListLivraisonsUserForm(this.getComponentForm(),res).show();
+            } catch (IOException ex) {
+            }
+        });
+                   tb.addMaterialCommandToSideMenu("Search Product", FontImage.MATERIAL_UPDATE, e -> {
+                       new searchProductForm(this.getComponentForm(),res).show();
+        });
+     
+      tb.addMaterialCommandToSideMenu("List Reclamation", FontImage.MATERIAL_VIEW_LIST, e -> {
+            try {
+                new ListReclamationForm(this.getComponentForm(),res).show();
+            } catch (IOException ex) {
+            }
         });
             
         }

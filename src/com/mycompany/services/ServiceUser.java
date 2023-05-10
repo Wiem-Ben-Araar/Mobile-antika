@@ -49,7 +49,7 @@ public class ServiceUser {
     // Signup
     public void signup(TextField nom, TextField password, TextField email, TextField confirmPassword, TextField prenom,
             TextField telephone, TextField adresse, ComboBox<String> roles, Resources res) {
-        String url = Statics.BASE_URL + "/user/signup";
+        String url = Statics.BASE_URL + "user/signup";
         req.setUrl(url);
         req.setPost(true); // changer la méthode HTTP en POST
 
@@ -85,7 +85,7 @@ public class ServiceUser {
     //SignIn
     public void signin(TextField email, TextField password, Resources res) {
 
-        String url = Statics.BASE_URL + "/user/signin?email=" + email.getText().toString() + "&password=" + password.getText().toString();
+        String url = Statics.BASE_URL + "user/signin?email=" + email.getText().toString() + "&password=" + password.getText().toString();
 
         req = new ConnectionRequest(url, false);
         req.setUrl(url);
@@ -170,7 +170,7 @@ public class ServiceUser {
     
     public String getPasswordByEmail(String email,Resources rs){
         
-         String url = Statics.BASE_URL + "/user/getPasswordByEmail?email=" + email ;
+         String url = Statics.BASE_URL + "user/getPasswordByEmail?email=" + email ;
 
         req = new ConnectionRequest(url, false); //false yaaneha url mezelt matbaathtch l server
         req.setUrl(url);
