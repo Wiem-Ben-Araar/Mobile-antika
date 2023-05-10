@@ -10,6 +10,7 @@ package com.mycompany.entities;
  * @author wiemb
  */
 public class Avis {
+
     private int id;
     private String commentaire;
     private int note;
@@ -18,14 +19,15 @@ public class Avis {
 
     public Avis() {
     }
-public Avis(String commentaire, int note, String createdAt, int user_id) {
-    this.commentaire = commentaire;
-    this.note = note;
-    this.createdAt = createdAt;
-    this.user_id = user_id;
-}
 
-    public Avis(int id, String commentaire, int note, String createdAt,int user_id) {
+    public Avis(String commentaire, int note, String createdAt, int user_id) {
+        this.commentaire = commentaire;
+        this.note = note;
+        this.createdAt = createdAt;
+        this.user_id = user_id;
+    }
+
+    public Avis(int id, String commentaire, int note, String createdAt, int user_id) {
         this.id = id;
         this.commentaire = commentaire;
         this.note = note;
@@ -84,6 +86,4 @@ public Avis(String commentaire, int note, String createdAt, int user_id) {
         return "Avis{" + "id=" + id + ", commentaire=" + commentaire + ", note=" + note + ", createdAt=" + createdAt + '}';
     }
 
-    
-    
 }

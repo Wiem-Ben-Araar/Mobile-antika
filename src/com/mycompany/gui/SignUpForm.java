@@ -18,9 +18,6 @@ package com.mycompany.gui;
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
-
-
-
 import com.codename1.components.FloatingHint;
 import com.codename1.ui.Button;
 import com.codename1.ui.ComboBox;
@@ -54,8 +51,7 @@ public class SignUpForm extends BaseForm {
         Form previous = Display.getInstance().getCurrent();
         tb.setBackCommand("", e -> previous.showBack());
         setUIID("SignIn");
-                
-        
+
         TextField email = new TextField("", "Email", 20, TextField.EMAILADDR);
         TextField nom = new TextField("", "Nom", 20, TextField.ANY);
         TextField prenom = new TextField("", "Prenom", 20, TextField.ANY);
@@ -63,21 +59,18 @@ public class SignUpForm extends BaseForm {
         TextField adresse = new TextField("", "Adresse", 20, TextField.ANY);
         TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
         TextField confirmPassword = new TextField("", "Confirm Password", 20, TextField.PASSWORD);
-       
-        
+
         //Role 
         //Vector 3ibara ala array 7atit fiha roles ta3na ba3d nzidouhom lel comboBox
         Vector<String> vectorRole;
         vectorRole = new Vector();
-        
+
         vectorRole.add("Client");
         vectorRole.add("Artiste");
         vectorRole.add("Expert");
-        
-        ComboBox<String>roles = new ComboBox<>(vectorRole);
-        
-        
-        
+
+        ComboBox<String> roles = new ComboBox<>(vectorRole);
+
         email.setSingleLineTextArea(false);
         nom.setSingleLineTextArea(false);
         prenom.setSingleLineTextArea(false);
@@ -90,18 +83,18 @@ public class SignUpForm extends BaseForm {
         signIn.addActionListener(e -> previous.showBack());
         signIn.setUIID("Link");
         Label alreadHaveAnAccount = new Label("Already have an account?");
-        
+
         Container content = BoxLayout.encloseY(
                 new Label("Sign Up", "LogoLabel"),
                 new FloatingHint(email),
                 createLineSeparator(),
                 new FloatingHint(nom),
                 createLineSeparator(),
-                 new FloatingHint(prenom),
+                new FloatingHint(prenom),
                 createLineSeparator(),
-                 new FloatingHint(adresse),
+                new FloatingHint(adresse),
                 createLineSeparator(),
-                 new FloatingHint(telephone),
+                new FloatingHint(telephone),
                 createLineSeparator(),
                 new FloatingHint(password),
                 createLineSeparator(),
@@ -117,11 +110,11 @@ public class SignUpForm extends BaseForm {
         ));
         next.requestFocus();
         next.addActionListener(e -> {
-            ServiceUser.getInstance().signup(nom, password, email, confirmPassword, prenom, telephone, adresse,roles, res);
-            
-        Dialog.show("Success","Account is saved","OK",null);
-        new SignInForm(res).show();
+            ServiceUser.getInstance().signup(nom, password, email, confirmPassword, prenom, telephone, adresse, roles, res);
+
+            Dialog.show("Success", "Account is saved", "OK", null);
+            new SignInForm(res).show();
         });
     }
-    
+
 }

@@ -102,7 +102,7 @@ public class ProfileForm extends BaseForm {
         prenom.setUIID("TextFieldBlack");
         adresse.setUIID("TextFieldBlack");
         telephone.setUIID("TextFieldBlack");
-System.out.println(SessionManager.getTelephone());
+        System.out.println(SessionManager.getTelephone());
 
         addStringValue("nom", nom);
         addStringValue("prenom", prenom);

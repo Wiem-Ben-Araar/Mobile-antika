@@ -18,13 +18,15 @@ package com.mycompany.gui;
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
-
-
-
 import com.codename1.components.FloatingHint;
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.SpanLabel;
+import javax.mail.Message;
+
 import com.codename1.ui.Button;
+import com.codename1.ui.Command;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
@@ -34,6 +36,14 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.services.ServiceUser;
+import com.sun.mail.smtp.SMTPTransport;
+import java.util.Date;
+import java.util.Properties;
+
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * Account activation UI
@@ -41,47 +51,94 @@ import com.codename1.ui.util.Resources;
  * @author Shai Almog
  */
 public class ActivateForm extends BaseForm {
-
+TextField email;
     public ActivateForm(Resources res) {
         super(new BorderLayout());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
-        tb.setUIID("Container");
+        tb.setUIID("IMGLogin");
         getTitleArea().setUIID("Container");
         Form previous = Display.getInstance().getCurrent();
         tb.setBackCommand("", e -> previous.showBack());
         setUIID("Activate");
-        
-        add(BorderLayout.NORTH, 
+
+        add(BorderLayout.NORTH,
                 BoxLayout.encloseY(
-                        new Label(res.getImage("smily.png"), "LogoLabel"),
-                        new Label("Awsome Thanks!", "LogoLabel")
+                        new Label("Antika!", "LogoLabel"),
+                        new Label(res.getImage("smily.png"), "LogoLabel")
+                       
                 )
         );
         
-        TextField code = new TextField("", "Enter Code", 20, TextField.PASSWORD);
-        code.setSingleLineTextArea(false);
+        email =new TextField("","saisir votre email!",20,TextField.ANY);
+        email.setSingleLineTextArea(false);
         
-        Button signUp = new Button("Sign Up");
-        Button resend = new Button("Resend");
-        resend.setUIID("CenterLink");
-        Label alreadHaveAnAccount = new Label("Already have an account?");
-        Button signIn = new Button("Sign In");
-        signIn.addActionListener(e -> previous.showBack());
-        signIn.setUIID("CenterLink");
+        Button valider =new Button ("Valider");
+        Label haveAnAccount = new Label ("Retour pour se connecter ");
+        Button signIn =new Button ("Renouveler votre mot de passe");
+        signIn.addActionListener(e->previous.showBack()); //yrajaa lel window eli kbal 
+        signIn.setUIID("centerLink");
+        Container content =BoxLayout.encloseY(
+                new Label(res.getImage("oublier.png"),"CenterLabel"),
+                new FloatingHint(email),
+                createLineSeparator() ,
+                valider,
+                FlowLayout.encloseCenter(haveAnAccount) ,
+                signIn 
         
-        Container content = BoxLayout.encloseY(
-                new FloatingHint(code),
-                createLineSeparator(),
-                new SpanLabel("We've sent the confirmation code to your email. Please check your inbox", "CenterLabel"),
-                resend,
-                signUp,
-                FlowLayout.encloseCenter(alreadHaveAnAccount, signIn)
         );
         content.setScrollableY(true);
-        add(BorderLayout.SOUTH, content);
-        signUp.requestFocus();
-        signUp.addActionListener(e -> new NewsfeedForm(res).show());
+        add(BorderLayout.CENTER,content);
+        valider.requestFocus();
+        valider.addActionListener(e->{
+            InfiniteProgress ip = new InfiniteProgress ();
+            final Dialog ipDialog = ip.showInfiniteBlocking();
+            //API send mailing appel
+           sendMail(res);
+           ipDialog.dispose();
+         Dialog.show("Mot de passe", "Nous avons envoyé le mot de passe à votre e-mail. Veuillez vérifier votre boîte de réception.", new Command("OK"));
+
+           new SignInForm(res).show();
+           refreshTheme();
+         
+            
+        });
+        
     }
     
+    //send mail
+    
+   public void sendMail(Resources res){
+     try {
+         Properties props =new Properties();
+         props.put("mail.transport.protocol","smtp"); //smtp protocol 
+         props.put("mail.smtps.host","smtp.gmail.com"); //smtp host 
+         props.put("mail.smtps.auth","true"); //enable authentification
+        
+        Session session = Session.getInstance(props,null);
+        MimeMessage msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress("Reintialisation du mot de passe <monEmail@domain.com>"));
+        msg.setRecipients(Message.RecipientType.TO, email.getText().toString());
+        msg.setSubject("Antika: Confirmation du ");
+        msg.setSentDate(new Date(System.currentTimeMillis()));
+      String mp =  ServiceUser.getInstance().getPasswordByEmail(email.getText().toString(), res);  
+        String txt ="Bienvenue sur Antika: Tapez ce mot de passe: "+mp+" dans le champs requis et appuier sur confirmer";
+        msg.setText(txt);
+        SMTPTransport st = (SMTPTransport)session.getTransport("smtps");
+        st.connect("smtp.gmail",465,"wiembenaraar2@gmail.com","wiwi321@");
+        st.sendMessage(msg,msg.getAllRecipients());
+        System.out.println("server response : "+st.getLastServerResponse());
+        
+        
+        
+        
+        
+     }catch(Exception e){
+         e.printStackTrace();
+         
+     }
+   
+    
+   }
+
 }

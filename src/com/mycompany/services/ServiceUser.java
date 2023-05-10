@@ -29,6 +29,8 @@ public class ServiceUser {
 
     //singleton 
     public static ServiceUser instance = null;
+    public static boolean resultOK = true;
+    String json;
 
     //initilisation connection request 
     private ConnectionRequest req;
@@ -120,6 +122,7 @@ public class ServiceUser {
                         new AjoutAvisForm(res).show();
                     } else {
                         Dialog.show("Erreur", "Compte inexistant", "OK", null);
+                        
                     }
                 }
             } catch (Exception ex) {
@@ -132,47 +135,10 @@ public class ServiceUser {
 
     }
 
-    //affichage all users 
-    public ArrayList<User> afficherAllClient() {
-        ArrayList<User> result = new ArrayList<>();
-        req.setUrl(Statics.BASE_URL + "user/liste");
-        req.addResponseListener(new ActionListener<NetworkEvent>() {
 
-            public void actionPerformed(NetworkEvent evt) {
-                JSONParser jsonp;
-                jsonp = new JSONParser();
-
-                try {
-                    Map<String, Object> mapUser = jsonp.parseJSON(new CharArrayReader(new String(req.getResponseData()).toCharArray()));
-
-                    List<Map<String, Object>> listOfMaps = (List<Map<String, Object>>) mapUser.get("root");
-                    for (Map<String, Object> obj : listOfMaps) {
-                        System.out.println("users : " + obj);
-                        User userL = new User();
-
-                        float id = Float.parseFloat(obj.get("id").toString());
-                        userL.setNom(obj.get("nom").toString());
-                        userL.setPrenom(obj.get("prenom").toString());
-                        userL.setEmail(obj.get("email").toString());
-                        userL.setAdresse(obj.get("adresse").toString());
-                        userL.setId((int) id);
-
-                        result.add(userL);
-
-                    }
-
-                } catch (Exception ex) {
-
-                    ex.printStackTrace();
-                }
-            }
-        });
-        NetworkManager.getInstance().addToQueueAndWait(req);
-        return result;
-    }
     // edit user
 
-    public static void editUser(String email, String password,String nom,String prenom,String adresse, String telephone) {
+    public static void editUser(String email, String password, String nom, String prenom, String adresse, String telephone) {
         String url = Statics.BASE_URL + "/user/editUser";
 
         ConnectionRequest req = new ConnectionRequest();
@@ -185,7 +151,6 @@ public class ServiceUser {
         req.addArgument("prenom", prenom);
         req.addArgument("adresse", adresse);
         req.addArgument("telephone", telephone);
-    
 
         req.addResponseListener((response) -> {
             byte[] data = ((byte[]) response.getMetaData());
@@ -202,4 +167,36 @@ public class ServiceUser {
         NetworkManager.getInstance().addToQueueAndWait(req);
     }
 
-}
+    
+    public String getPasswordByEmail(String email,Resources rs){
+        
+         String url = Statics.BASE_URL + "/user/getPasswordByEmail?email=" + email ;
+
+        req = new ConnectionRequest(url, false); //false yaaneha url mezelt matbaathtch l server
+        req.setUrl(url);
+        req.setPost(false);
+        req.addResponseListener((e) -> {
+
+            JSONParser j = new JSONParser();
+
+           json= new String(req.getResponseData()) + "";
+
+            try {
+
+               
+                    System.out.println("data ==" + json);
+
+                    Map<String, Object> password = j.parseJSON(new CharArrayReader(json.toCharArray()));
+
+                 
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        });
+
+        NetworkManager.getInstance().addToQueueAndWait(req);
+       return json;
+    }
+    }
+

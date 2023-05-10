@@ -18,9 +18,6 @@ package com.mycompany.gui;
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
-
-
-
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
@@ -54,7 +51,7 @@ public class WalkthruForm extends Form {
         t.setUIID("Container");
         t.getContentPane().setUIID("Container");
         add(BorderLayout.CENTER, t);
-        
+
         ScaleImageLabel page1 = new ScaleImageLabel(res.getImage("welcome-slide-1.png"));
         ScaleImageLabel page2 = new ScaleImageLabel(res.getImage("welcome-slide-2.png"));
         ScaleImageLabel page3 = new ScaleImageLabel(res.getImage("welcome-slide-3.png"));
@@ -67,15 +64,14 @@ public class WalkthruForm extends Form {
         t.addTab("", page1);
         t.addTab("", page2);
         t.addTab("", page3);
-        
+
         String[] messages = {
             "Manage your tasks quickly\nand efficiently",
             "This demo is powered by\nCodename One",
-            "Start NOW\n press skip"            
+            "Start NOW\n press skip"
         };
-        
+
         SpanLabel message = new SpanLabel(messages[0], "WelcomeMessage");
-                
 
         ButtonGroup bg = new ButtonGroup();
         int size = Display.getInstance().convertToPixels(1);
@@ -93,25 +89,25 @@ public class WalkthruForm extends Form {
         FlowLayout flow = new FlowLayout(CENTER);
         flow.setValign(CENTER);
         Container radioContainer = new Container(flow);
-        for(int iter = 0 ; iter < rbs.length ; iter++) {
+        for (int iter = 0; iter < rbs.length; iter++) {
             rbs[iter] = RadioButton.createToggle(unselectedWalkthru, bg);
             rbs[iter].setPressedIcon(selectedWalkthru);
             rbs[iter].setUIID("Label");
             radioContainer.add(rbs[iter]);
         }
-                
+
         rbs[0].setSelected(true);
         t.addSelectionListener((i, ii) -> {
-            if(!rbs[ii].isSelected()) {
+            if (!rbs[ii].isSelected()) {
                 rbs[ii].setSelected(true);
                 message.setText(messages[ii]);
             }
         });
-        
+
         Button skip = new Button("Skip");
         skip.setUIID("SkipButton");
         skip.addActionListener(e -> new SignInForm(res).show());
-        
+
         Container welcomeNoteArea = BoxLayout.encloseY(message,
                 LayeredLayout.encloseIn(
                         radioContainer,
@@ -121,5 +117,5 @@ public class WalkthruForm extends Form {
         welcomeNoteArea.setUIID("WelcomeNoteArea");
         add(BorderLayout.SOUTH, welcomeNoteArea);
     }
-    
+
 }
