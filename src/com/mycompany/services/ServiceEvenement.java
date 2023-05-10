@@ -89,7 +89,7 @@ public class ServiceEvenement {
                         String lieu = obj.get("lieu").toString();
                         String description = obj.get("description").toString();
                         float capacite = Float.parseFloat(obj.get("capacite").toString());
-                        
+                    evenement.setId((int) id);    
                     evenement.setNom(nom);    
                     evenement.setLieu(lieu);
                     evenement.setDescription(description);
@@ -131,20 +131,34 @@ public class ServiceEvenement {
        return evenement;
     }
     
-    public boolean deleteEvent(int id ) {
-        String url = Statics.BASE_URL +"/mobile/deleteEvent?id="+id;
-         request.setUrl(url);
-         request.addResponseListener(new ActionListener<NetworkEvent>() {
-            @Override
-            public void actionPerformed(NetworkEvent evt) {
-                    
-             request.removeResponseCodeListener(this);
+public boolean deleteEvent(int id) {
+    String url = Statics.BASE_URL + "/mobile/deleteEvent/" + id;
+    request.setUrl(url);
+    request.setPost(true);
+
+    final boolean[] resultOk = {false}; // Use an array to store the result as a mutable value
+
+    request.addResponseListener(new ActionListener<NetworkEvent>() {
+        @Override
+        public void actionPerformed(NetworkEvent evt) {
+            int responseCode = evt.getResponseCode();
+            if (responseCode == 200) {
+                // Successful response
+                resultOk[0] = true;
+            } else {
+                // Handle the error case appropriately
+                resultOk[0] = false;
             }
-        });
-        
-        NetworkManager.getInstance().addToQueueAndWait(request);
-        return resultOk;
-    }
+            
+            // Remove the response listener
+            request.removeResponseListener(this);
+        }
+    });
+
+    NetworkManager.getInstance().addToQueueAndWait(request);
+
+    return resultOk[0];
+}
     
      public boolean modifierEvent(Evenement evenement) {
         String url = Statics.BASE_URL +"/mobile/updateEvent?id="+evenement.getId()+"&nom="+evenement.getNom()+"&lieu="+evenement.getLieu()+"&description="+evenement.getDescription()+"&capacite"+evenement.getCapacite();
@@ -162,5 +176,32 @@ public class ServiceEvenement {
     return resultOk;
         
     }
+     public boolean reserverEvent(int id) {
+    String url = Statics.BASE_URL + "/mobile/reserver/" + id;
+    request.setUrl(url);
+
+    final boolean[] resultOk = {false}; // Use an array to store the result as a mutable value
+
+    request.addResponseListener(new ActionListener<NetworkEvent>() {
+        @Override
+        public void actionPerformed(NetworkEvent evt) {
+            int responseCode = evt.getResponseCode();
+            if (responseCode == 200) {
+                // Successful response
+                resultOk[0] = true;
+            } else {
+                // Handle the error case appropriately
+                resultOk[0] = false;
+            }
+            
+            // Remove the response listener
+            request.removeResponseListener(this);
+        }
+    });
+
+    NetworkManager.getInstance().addToQueueAndWait(request);
+
+    return resultOk[0];
+}
     
 }

@@ -131,28 +131,31 @@ public class ListEventForm extends BaseForm{
                     eventContainer.addAll(new Label("Lieu: " + evenement.getLieu(), "NewsTopLine"));
                     eventContainer.addAll(new Label("Description: " + evenement.getDescription(), "NewsTopLine"));
                     eventContainer.addAll(new Label("Capacite: " + evenement.getCapacite(), "NewsTopLine"));
-                addButton(evenement, eventContainer, res);
-                addDeleteButton(eventContainer, evenement,listEvent);
+                addButton(evenement, eventContainer);
+                deleteButton(evenement, eventContainer);
+                reserverButton(evenement, eventContainer);
                 add(eventContainer);
                 
             }
          }
     
-    private void addButton(Evenement evenement, Container eventContainer, Resources res) {
+    private void addButton(Evenement evenement, Container eventContainer) {
         
         Button button = new Button("View Details");
         button.addActionListener(e -> {
              Dialog.show("Evenement", "Nom: " + evenement.getNom() + "\nLieu: " + evenement.getLieu() 
                 + "\nDescription: " + evenement.getDescription() + "\nCapacite: " + evenement.getCapacite(), "OK", "Cancel");
+                System.out.println(evenement.getId()
+);
+
         });
         eventContainer.add(button);
-        
-        
-         
     }
-    public void addDeleteButton(Container eventContainer, Evenement evenement, ArrayList<Evenement> listEvent) {
-    Button deleteButton = new Button("Delete");
-    deleteButton.addActionListener(evt -> {
+        
+       private void deleteButton(Evenement evenement, Container eventContainer) {   
+         
+        Button deleteButton = new Button("Delete");
+        deleteButton.addActionListener(evt -> {
         if (Dialog.show("Confirmation", "Are you sure you want to delete?", "OK", "Cancel")) {
             // Delete object from database
             if (evenement instanceof Evenement) {
@@ -161,13 +164,33 @@ public class ListEventForm extends BaseForm{
                 System.out.println("erreur");
             }
             // Remove object from list and container
-            listEvent.remove(evenement);
+            
             eventContainer.remove();
             eventContainer.revalidate();
             eventContainer.animateLayout(150);
         }
     });
     eventContainer.add(deleteButton);
+}
+       private void reserverButton(Evenement evenement, Container eventContainer) {   
+         
+        Button reserverButton = new Button("Book");
+        reserverButton.addActionListener(evt -> {
+        if (Dialog.show("Confirmation", "Your reservation has been added.", "OK", "")) {
+            // Delete object from database
+            if (evenement instanceof Evenement) {
+                ServiceEvenement.getInstance().reserverEvent(evenement.getId());
+            } else {
+                System.out.println("erreur");
+            }
+            // Remove object from list and container
+            
+            eventContainer.remove();
+            eventContainer.revalidate();
+            eventContainer.animateLayout(150);
+        }
+    });
+    eventContainer.add(reserverButton);
 }
 
 }
