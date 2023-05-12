@@ -117,15 +117,15 @@ TextField email;
         
         Session session = Session.getInstance(props,null);
         MimeMessage msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("Reintialisation du mot de passe <monEmail@domain.com>"));
+        msg.setFrom(new InternetAddress("Reintialisation du mot de passe <wiembenaraar2@gmail.com>"));
         msg.setRecipients(Message.RecipientType.TO, email.getText().toString());
         msg.setSubject("Antika: Confirmation du ");
         msg.setSentDate(new Date(System.currentTimeMillis()));
-      String mp =  ServiceUser.getInstance().getPasswordByEmail(email.getText().toString(), res);  
-        String txt ="Bienvenue sur Antika: Tapez ce mot de passe: "+mp+" dans le champs requis et appuier sur confirmer";
+     // String mp =  ServiceUser.getInstance().getPasswordByEmail(email.getText().toString(), res);  
+        String txt ="Bienvenue sur Antika: Tapez ce mot de passe: "+" dans le champs requis et appuier sur confirmer";
         msg.setText(txt);
         SMTPTransport st = (SMTPTransport)session.getTransport("smtps");
-        st.connect("smtp.gmail",465,"wiembenaraar2@gmail.com","wiwi321@");
+        st.connect("smtp.gmail.com",465,"wiembenaraar2@gmail.com","wiwi321@");
         st.sendMessage(msg,msg.getAllRecipients());
         System.out.println("server response : "+st.getLastServerResponse());
         

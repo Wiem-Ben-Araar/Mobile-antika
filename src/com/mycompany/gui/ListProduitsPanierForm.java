@@ -99,7 +99,7 @@ public class ListProduitsPanierForm extends BaseForm {
               setTitle("List Panier");
         setLayout(BoxLayout.yCenter());
           ArrayList<Panier> list;
-          int idUser=1;
+          int idUser=SessionManager.getId();
         list = ServicePanier.getInstance().getAll(idUser);
 
         for ( Panier p : list) {

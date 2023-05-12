@@ -13,6 +13,7 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.events.ActionListener;
 import com.mycompany.entities.Livraison;
 import com.mycompany.entities.User;
+import com.mycompany.gui.SessionManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,9 +50,9 @@ public class ServiceLivraison {
            List< Map<String,Object>> list =(List< Map<String,Object>>) ProduitListJson.get("root");
            for ( Map<String,Object> obj: list){
              Livraison p = new Livraison();
-                                  Map<String,Object> userObj = (Map<String,Object>) obj.get("user");
+                                
 
-             float idUser = Float.parseFloat(userObj.get("id").toString());
+             float idUser = SessionManager.getId();
              User u =new User();
              u.setId((int)idUser);
              float id = Float.parseFloat(obj.get("id").toString());

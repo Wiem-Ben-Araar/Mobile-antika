@@ -83,11 +83,12 @@ public class BaseForm extends Form {
         tb.addComponentToSideMenu(LayeredLayout.encloseIn(
                 sl,
                 FlowLayout.encloseCenterBottom(
-                        new Label(res.getImage("profile.png"), "PictureWhiteBackgrond"))
+                        new Label(res.getImage("profile-pic.png"), "PictureWhiteBackgrond"))
         ));
         
         tb.addMaterialCommandToSideMenu("Ajouter une Avis", FontImage.MATERIAL_UPDATE, e -> new AjoutAvisForm(res).show());
         tb.addMaterialCommandToSideMenu("Liste des Avis", FontImage.MATERIAL_UPDATE, e -> new ListAvisForm(res).show());
+         tb.addMaterialCommandToSideMenu("Statistiques", FontImage.MATERIAL_UPDATE, e -> new StatistiquePieForm(res).show());
         tb.addMaterialCommandToSideMenu("Profile", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
         tb.addMaterialCommandToSideMenu("Deconnexion", FontImage.MATERIAL_EXIT_TO_APP, e -> {
             new SignInForm(res).show();

@@ -81,7 +81,7 @@ public class SignInForm extends BaseForm {
         signIn.requestFocus();
         signIn.addActionListener(e -> {
             ServiceUser.getInstance().signin(email, password, res);
-            new AjoutAvisForm(res).show();
+         //   new AjoutAvisForm(res).show();
         });
 
         

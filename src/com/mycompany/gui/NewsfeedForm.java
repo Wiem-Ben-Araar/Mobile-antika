@@ -185,7 +185,7 @@ public class NewsfeedForm extends BaseForm {
 
 
         ArrayList<Produit> list=ServiceProduit.getInstance().getAll();
-        int idUser=1;
+        int idUser=SessionManager.getId();
         //list = ServiceReponse.getInstance().getAllProduits();
          for ( Produit p : list) {
                try {

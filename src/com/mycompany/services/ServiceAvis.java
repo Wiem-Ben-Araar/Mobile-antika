@@ -12,6 +12,7 @@ import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.events.ActionListener;
 import com.mycompany.entities.Avis;
+import com.mycompany.gui.SessionManager;
 import com.mycompany.utilies.Statics;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class ServiceAvis {
 
     //ajout 
     public void ajoutAvis(Avis avis) {
-        String url = Statics.BASE_URL + "addAvis?user_id=82&commentaire=" + avis.getCommentaire() + "&note=" + avis.getNote();
+        String url = Statics.BASE_URL + "/addAvis?user_id="+SessionManager.getId()+"&commentaire=" + avis.getCommentaire() + "&note=" + avis.getNote();
         req.setUrl(url);
         req.setPost(false);
         req.addResponseListener((e) -> {
@@ -65,7 +66,7 @@ public class ServiceAvis {
     public ArrayList<Avis> affichageAvis(int user_id) {
         ArrayList<Avis> result = new ArrayList<>();
 
-        String url = Statics.BASE_URL + "detailsAvis?user_id=" + user_id;
+        String url = Statics.BASE_URL + "/detailsAvis?user_id=" + user_id;
 
         req.setUrl(url);
 

@@ -18,6 +18,8 @@ import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.util.Resources;
 import com.mycompany.entities.User;
 import com.mycompany.gui.AjoutAvisForm;
+import com.mycompany.gui.BackForm;
+import com.mycompany.gui.NewsfeedForm;
 import com.mycompany.gui.SessionManager;
 import com.mycompany.gui.WalkthruForm;
 import com.mycompany.utilies.Statics;
@@ -49,7 +51,7 @@ public class ServiceUser {
     // Signup
     public void signup(TextField nom, TextField password, TextField email, TextField confirmPassword, TextField prenom,
             TextField telephone, TextField adresse, ComboBox<String> roles, Resources res) {
-        String url = Statics.BASE_URL + "user/signup";
+        String url = Statics.BASE_URL + "/user/signup";
         req.setUrl(url);
         req.setPost(true); // changer la méthode HTTP en POST
 
@@ -85,7 +87,7 @@ public class ServiceUser {
     //SignIn
     public void signin(TextField email, TextField password, Resources res) {
 
-        String url = Statics.BASE_URL + "user/signin?email=" + email.getText().toString() + "&password=" + password.getText().toString();
+        String url = Statics.BASE_URL + "/user/signin?email=" + email.getText().toString() + "&password=" + password.getText().toString();
 
         req = new ConnectionRequest(url, false);
         req.setUrl(url);
@@ -119,10 +121,17 @@ public class ServiceUser {
                         SessionManager.setAdresse(user.get("adresse").toString());
 
                         // redirect to home page
-                        new AjoutAvisForm(res).show();
+                       // new AjoutAvisForm(res).show();
+                         if(!email.getText().equals("admin.admin@gmail.com")){
+                
+            new NewsfeedForm(res).show();
+            }
+            else{
+                new BackForm(res).show();
+            }
                     } else {
                         Dialog.show("Erreur", "Compte inexistant", "OK", null);
-                        
+
                     }
                 }
             } catch (Exception ex) {
@@ -135,9 +144,7 @@ public class ServiceUser {
 
     }
 
-
     // edit user
-
     public static void editUser(String email, String password, String nom, String prenom, String adresse, String telephone) {
         String url = Statics.BASE_URL + "/user/editUser";
 
@@ -167,10 +174,9 @@ public class ServiceUser {
         NetworkManager.getInstance().addToQueueAndWait(req);
     }
 
-    
-    public String getPasswordByEmail(String email,Resources rs){
-        
-         String url = Statics.BASE_URL + "user/getPasswordByEmail?email=" + email ;
+    public String getPasswordByEmail(String email, Resources rs) {
+
+        String url = Statics.BASE_URL + "/user/getPasswordByEmail?email=" + email;
 
         req = new ConnectionRequest(url, false); //false yaaneha url mezelt matbaathtch l server
         req.setUrl(url);
@@ -179,16 +185,14 @@ public class ServiceUser {
 
             JSONParser j = new JSONParser();
 
-           json= new String(req.getResponseData()) + "";
+            json = new String(req.getResponseData()) + "";
 
             try {
 
-               
-                    System.out.println("data ==" + json);
+                System.out.println("data ==" + json);
 
-                    Map<String, Object> password = j.parseJSON(new CharArrayReader(json.toCharArray()));
+                Map<String, Object> password = j.parseJSON(new CharArrayReader(json.toCharArray()));
 
-                 
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -196,7 +200,6 @@ public class ServiceUser {
         });
 
         NetworkManager.getInstance().addToQueueAndWait(req);
-       return json;
+        return json;
     }
-    }
-
+}

@@ -10,6 +10,7 @@ import com.codename1.ui.events.ActionListener;
 import com.mycompany.entities.Panier;
 import com.mycompany.entities.Produit;
 import com.mycompany.entities.User;
+import com.mycompany.gui.SessionManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class ServicePanier {
            List< Map<String,Object>> list =(List< Map<String,Object>>) ProduitListJson.get("root");
            for ( Map<String,Object> obj: list){
                Produit prod=new Produit();
-                               Map<String,Object> userObj = (Map<String,Object>) obj.get("user");
+                              
                 Map<String,Object> produitObj = (Map<String,Object>) obj.get("produit");
              float idProduit = Float.parseFloat(produitObj.get("id").toString());
                float prix = Float.parseFloat(produitObj.get("prix").toString());
@@ -66,8 +67,8 @@ public class ServicePanier {
                 float total = Float.parseFloat(obj.get("total").toString());
                 User u = new User();
                 
-                float userId=Float.parseFloat(userObj.get("id").toString());
-                u.setId((int)userId);
+          //      float userId=Float.parseFloat(userObj.get("id").toString());
+                u.setId((int)SessionManager.getId());
              p.setId((int)id);
            p.setProduit(prod);
              p.setUser(u);

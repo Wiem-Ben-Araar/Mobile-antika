@@ -102,7 +102,7 @@ public class ListAvisForm extends BaseForm{
 
         
               //Appel affichage methode
-        ArrayList<Avis>list = ServiceAvis.getInstance().affichageAvis(82);
+        ArrayList<Avis>list = ServiceAvis.getInstance().affichageAvis(SessionManager.getId());
         
         for(Avis rec : list ) {
              String urlImage ="back-logo.jpeg";//image statique pour le moment ba3d taw fi  videos jayin nwarikom image 
